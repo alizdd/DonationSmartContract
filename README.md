@@ -11,6 +11,7 @@
 Get-ExecutionPolicy -List<br />
 Set-ExecutionPolicy -Scope LocalMachine Unrestricted<br />
 <br />
+<br />
 -VS Code üzerinde yeni bir klasör aç ve terminale truffle init yazarak yeni bir proje oluştur, <br />
 Ganache programını aç, quick start yaptıktan sonra  programda gözüken rpc server portunu proje içindeki truffle-config.js dosyasında development bloğunun altına yaz ve commentleri kaldır. bu şekilde ganache ile lokalde oluşturulan blockchain ağı kullanılarak smart contract test edilebilir.
 Ayarlardan oluşturulan projenin truffle-config.js dosyasını seç, 
