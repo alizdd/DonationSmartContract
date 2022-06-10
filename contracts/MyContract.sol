@@ -12,9 +12,7 @@ contract MyContract{
 
     function set(string memory _value) public{
         value = _value;
-    }
-
-    
+    }    
 }
 
 contract Next{

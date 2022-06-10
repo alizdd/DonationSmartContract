@@ -1,11 +1,13 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.4.22 <0.9.0;
+pragma solidity >=0.5.0 <0.9.0;
 
-contract MyContract{
+contract KriptoBagis{
     address owner;
+    mapping (address => bool) isManagerAddress;
+    mapping (address => Organization) charityAddressInfos;
+    mapping (address => bool) isValidated;
     address payable[] charityAddresses;
-    mapping (address => bool) managerAddresses;
-    mapping (address => Organization[]) charityAddressInfos;
+    address[] managerAddresses;
     uint256 totalDonationsAmount;
     uint256 highestDonation;
     address highestDonor;
@@ -24,28 +26,33 @@ contract MyContract{
     struct Organization{
         string organizationName;
         OrganizationType[] organizationTypes;
-        bool isValidated;
     }
 
 
-    /// Bağış yapan adresi ve bağış miktarını blockchain'de tutar
+    /// Bağış yapan adresi ve bağış miktarını blockchain'de kaydeder
     event Donation(
         address indexed _donor,
         uint256 _value,
         address indexed _destinationAddress
     );
 
-    // Contract'ta tanımlanan manager'ın onayladığı adresin bilgisini blockchian'de tutar
+    // Contract'ta tanımlanan manager'ın onayladığı adresin bilgisini blockchian'de kaydeder
     event AddressValidation(
         address indexed _manager,
         address indexed _validatedAddress
     );
 
+    //contracta eklenen manager address bilgisi
+    event AddManager(
+        address indexed _managerAddress
+    );
+
     //function getOrganization(address payable memory address) public returns ()
     constructor(address[] memory addresses_){
         owner = msg.sender; //Contract'ı deploylayan kişinin kaydının tutulması
+        managerAddresses = addresses_;
         for(uint i=0; i < addresses_.length; i++){
-            managerAddresses[addresses_[i]] = true;
+            isManagerAddress[addresses_[i]] = true;
         }
         totalDonationsAmount = 0;
         highestDonation = 0;
@@ -56,18 +63,31 @@ contract MyContract{
         //for(uint i=0; i < organizationTypes.length; i++){
         //    require(organizationTypes[i] >= 0 && organizationTypes[i] <= 7, 'Organization Type is Not Valid, Valid range is between 0 and 7');
         //}
-        charityAddresses.push(payable(msg.sender));
-        charityAddressInfos[msg.sender].push(Organization({
+        Organization memory newOrganization = charityAddressInfos[msg.sender];
+
+        newOrganization.organizationName = organizationName;
+        newOrganization.organizationTypes = organizationTypes;
+
+        charityAddressInfos[msg.sender] = Organization({
             organizationName: organizationName,
-            organizationTypes: organizationTypes,
-            isValidated: false
-        }));
+            organizationTypes: organizationTypes
+        });
+        //charityAddresses.push(payable(msg.sender));
+
+        charityAddresses.push(payable(msg.sender));
+        charityAddressInfos[msg.sender] = newOrganization;
     }
 
-    /// Returns all the available charity addresses.
+    /// Bütün bağış adreslerini döndürür
     /// @return charityAddresses
     function getAddresses() public view returns (address payable[] memory) {
         return charityAddresses;
+    }
+
+    
+    function getAddressInfos(address payable charityAddress) public checkCharityAddress(charityAddress) view returns (address payable, string memory, OrganizationType[] memory, bool)
+    {
+        return (charityAddress, charityAddressInfos[charityAddress].organizationName, charityAddressInfos[charityAddress].organizationTypes, isValidated[charityAddress]);
     }
       
 
@@ -79,7 +99,7 @@ contract MyContract{
 
     //Organizasyon cüzdanlarını doğrulayacak adreslerin yetkili olup olmadığını kontrol eder
     modifier isManager(){
-        require(managerAddresses[msg.sender] || msg.sender == owner,'The Address is not authorized manager address');
+        require(isManagerAddress[msg.sender] || msg.sender == owner,'The Address is not authorized manager address');
         _;
     }
 
@@ -100,9 +120,9 @@ contract MyContract{
         bool addresFound = false;
         for(uint i=0 ; i < charityAddresses.length; i++){
             for(uint j=0; j < otherDestinationAddresses.length; j++)
-            if(charityAddresses[i] == otherDestinationAddresses[j]){
-                addresFound = true;
-            }
+                if(charityAddresses[i] == otherDestinationAddresses[j]){
+                    addresFound = true;
+                }
         }
         require(addresFound, 'Destination addres did not found in the contract');
         _;
@@ -206,11 +226,69 @@ contract MyContract{
         }
     }
 
+    // /// Parametre ile gelen yüzdeyi ana adrese aktarır, 
+    // /// yüzdenin geri kalanındaki miktarı ise parametre olarak gelen organizasyon tipindeki diğer adreslere dağıtır, SADECE doğrulanmış adreslere dağıtır.
+    // ///
+    // /// @param destinationAddress Ana adres
+    // /// @param mainPercentage Ana adrese aktarılacak yüzde
+    // /// @param organizationType Bağışın geri kalanının dağıtımı yapılacak organizasyon tipi
+    // function deposit(address payable destinationAddress, uint256 mainPercentage, OrganizationType organizationType) public 
+    // validateDestination(destinationAddress)
+    // validateTransferAmount() 
+    // checkCharityAddress(destinationAddress) 
+    // validateDonationPercentage(mainPercentage)  
+    // payable {
+
+
+    //     uint256 donationAmount = (msg.value * mainPercentage) / 100 ;
+    //     uint256 actualDeposit = msg.value - donationAmount;
+
+    //     uint count = 0;
+    //     address payable[] memory tempArray;
+
+    //     for (uint i=0; i < charityAddresses.length; i++){
+    //         if(charityAddressInfos[charityAddresses[i]].organizationTypes[0] == organizationType 
+    //         && isValidated[charityAddresses[i]]== true 
+    //         && charityAddresses[i] != destinationAddress){
+    //             count++;
+    //             tempArray.push(charityAddresses[i]);
+    //         }
+    //     }
+
+    //     if(count > 0){
+    //         uint256 validatedAddressAmount = actualDeposit / count;
+
+    //         for(uint i=0; i< tempArray.length; i++){
+    //             tempArray[i].transfer(validatedAddressAmount);
+    //         } 
+    //     }
+        
+    //     destinationAddress.transfer(donationAmount);
+
+    //     emit Donation(msg.sender, donationAmount, destinationAddress);
+
+    //     totalDonationsAmount += donationAmount;
+
+    //     if (donationAmount > highestDonation) {
+    //         highestDonation = donationAmount;
+    //         highestDonor = msg.sender;
+    //     }
+    // }
+
     function validateCharityAddress(address payable validatingAddress)
     isManager()
     checkCharityAddress(validatingAddress) 
     public {
-        charityAddressInfos[validatingAddress][1].isValidated = true;
+        isValidated[validatingAddress] = true;
+        emit AddressValidation(msg.sender, validatingAddress);
+    }
+
+    function addManagerAddress(address managerAddress)
+    restrictToOwner()
+    isManager()
+    public {
+        isManagerAddress[managerAddress] = true;
+        emit AddManager(managerAddress);
     }
 
     /// Returns the total amount raised by all donations (in wei) towards any charity.
@@ -230,5 +308,4 @@ contract MyContract{
     function destroy() public restrictToOwner() {
         selfdestruct(payable(owner));
     }
-
 }
