@@ -6,16 +6,22 @@ const assert = require('assert');
 contract('MyContract', (accounts) => {
 
     it('GetMyValue test ediyorum', async ()=>{
-        const mytest = await MyContract.deployed();
-        const result = await mytest.get();
-        console.log(`result: ${result}`);
-        assert.equal(result, result, "meraba dünya");
+        const mytest = await MyContract.deployed();       
+
+        //const test = await mytest.addAddress();
+
+        const test = await mytest.getAddress();
+        console.log(test);
+
+        // const result = await mytest.get(); 
+        // console.log(`result: ${result}`);
+        // assert.equal(result, result, "meraba dünya");
     });
 
-    it('Diğer contract\'ı test ediyorum', async () =>{
-        const caller = await Caller.deployed();
-        const result = await caller.f();
-        console.log(result);
-    })
+    // it('Diğer contract\'ı test ediyorum', async () =>{
+    //     const caller = await Caller.deployed();
+    //     const result = await caller.f();
+    //     console.log(result);
+    // })
     
 });

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.5.0 <0.9.0;
+pragma solidity ^0.8.13;
 
 contract KriptoBagis{
     address owner;
@@ -24,6 +24,7 @@ contract KriptoBagis{
     }
 
     struct Organization{
+        address payable organizationAddress;
         string organizationName;
         OrganizationType[] organizationTypes;
     }
@@ -63,25 +64,33 @@ contract KriptoBagis{
         //for(uint i=0; i < organizationTypes.length; i++){
         //    require(organizationTypes[i] >= 0 && organizationTypes[i] <= 7, 'Organization Type is Not Valid, Valid range is between 0 and 7');
         //}
-        Organization memory newOrganization = charityAddressInfos[msg.sender];
 
-        newOrganization.organizationName = organizationName;
-        newOrganization.organizationTypes = organizationTypes;
+        // Organization storage newOrganization = charityAddressInfos[msg.sender];
 
-        charityAddressInfos[msg.sender] = Organization({
-            organizationName: organizationName,
-            organizationTypes: organizationTypes
-        });
+        // newOrganization.organizationAddress = payable(msg.sender);
+        // newOrganization.organizationName = organizationName;
+        // newOrganization.organizationTypes = organizationTypes;
+
         //charityAddresses.push(payable(msg.sender));
 
+        //charityAddresses.push(payable(msg.sender));
+        charityAddressInfos[msg.sender] = Organization({
+            organizationAddress: payable(msg.sender),
+            organizationName: organizationName,
+            organizationTypes: organizationTypes
+
+        });
         charityAddresses.push(payable(msg.sender));
-        charityAddressInfos[msg.sender] = newOrganization;
     }
 
     /// Bütün bağış adreslerini döndürür
     /// @return charityAddresses
     function getAddresses() public view returns (address payable[] memory) {
         return charityAddresses;
+    }
+
+    function getAddress() public view returns(Organization memory){
+        return charityAddressInfos[msg.sender];
     }
 
     
@@ -105,6 +114,7 @@ contract KriptoBagis{
 
     //Bağış yapılacak adres daha önce contract'a kaydedildi mi?
     modifier checkCharityAddress(address payable destinationAddress) {
+        require(charityAddresses.length > 0, 'Currently there are no addresses in the contract');
         bool addresFound = false;
         for(uint i=0 ; i < charityAddresses.length; i++){
             if(charityAddresses[i] == destinationAddress){
@@ -204,15 +214,15 @@ contract KriptoBagis{
     ///
     /// @param destinationAddress Ana adres
     /// @param mainPercentage Ana adrese aktarılacak yüzde
-    function deposit(address payable destinationAddress,  uint256 mainPercentage) public 
+    function depositDirect(address payable destinationAddress,  uint256 mainPercentage) 
     validateDestination(destinationAddress)
     validateTransferAmount() 
     checkCharityAddress(destinationAddress) 
     validateDonationPercentage(mainPercentage)  
-    payable {
+    external payable {
 
 
-        uint256 donationAmount = msg.value ;
+        uint256 donationAmount = msg.value;
 
         destinationAddress.transfer(donationAmount);
 
