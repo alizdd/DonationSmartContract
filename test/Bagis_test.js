@@ -43,6 +43,9 @@ contract('Bagis', (accounts) => {
 
 			const transferAmount = Number(web3.utils.toWei('10', 'ether'));
 
+
+			//const test5 = await mytest.addNewOrganization("Mehmetçik", [3,6], {from: accounts[5]});
+
 			//await mytest.depositDirect(accounts[4], 50, {from:accounts[1], value: transferAmount, gas: 3000000});//.sendTransaction()  {from:accounts[1], value:'5e18'}
 
 			await mytest.deposit(accounts[4], [accounts[3],accounts[5]] , 50, {from:accounts[9], value: transferAmount, gas: 3000000});
@@ -51,7 +54,7 @@ contract('Bagis', (accounts) => {
 			console.log(`Wallet [4]: ${depositedAddress.toString()}`);
 
 
-			const totalDonationsAmount = await instance.getTotalDonationsAmount();
+			const totalDonationsAmount = await mytest.getTotalDonationsAmount();
 			console.log(`Total donation: ${totalDonationsAmount.toString()}`);
 		// 	assert.equal(Number(totalDonationsAmount), donationAmount)
 

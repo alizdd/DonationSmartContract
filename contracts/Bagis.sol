@@ -5,9 +5,7 @@ contract KriptoBagis{
     address owner;
     mapping (address => bool) isManagerAddress;
     mapping (address => Organization) charityAddressInfos;
-    mapping (address => bool) isValidated;
     address payable[] charityAddresses;
-    address[] managerAddresses;
     uint256 totalDonationsAmount;
     uint256 highestDonation;
     address highestDonor;
@@ -27,8 +25,10 @@ contract KriptoBagis{
         address payable organizationAddress;
         string organizationName;
         OrganizationType[] organizationTypes;
+        bool isValidated;
     }
 
+    event OrganizationAdded(Organization _a);
 
     /// Bağış yapan adresi ve bağış miktarını blockchain'de kaydeder
     event Donation(
@@ -49,38 +49,22 @@ contract KriptoBagis{
     );
 
     //function getOrganization(address payable memory address) public returns ()
-    constructor(address[] memory addresses_){
+    constructor(){
         owner = msg.sender; //Contract'ı deploylayan kişinin kaydının tutulması
-        managerAddresses = addresses_;
-        for(uint i=0; i < addresses_.length; i++){
-            isManagerAddress[addresses_[i]] = true;
-        }
         totalDonationsAmount = 0;
         highestDonation = 0;
     }
 
 
-    function addNewOrganization(string memory organizationName, OrganizationType[] memory organizationTypes) public {
-        //for(uint i=0; i < organizationTypes.length; i++){
-        //    require(organizationTypes[i] >= 0 && organizationTypes[i] <= 7, 'Organization Type is Not Valid, Valid range is between 0 and 7');
-        //}
-
-        // Organization storage newOrganization = charityAddressInfos[msg.sender];
-
-        // newOrganization.organizationAddress = payable(msg.sender);
-        // newOrganization.organizationName = organizationName;
-        // newOrganization.organizationTypes = organizationTypes;
-
-        //charityAddresses.push(payable(msg.sender));
-
-        //charityAddresses.push(payable(msg.sender));
+    function addNewOrganization(string memory organizationName, OrganizationType[] memory organizationTypes) CheckNewCharityAddress(payable(msg.sender)) public {
         charityAddressInfos[msg.sender] = Organization({
             organizationAddress: payable(msg.sender),
             organizationName: organizationName,
-            organizationTypes: organizationTypes
-
+            organizationTypes: organizationTypes,
+            isValidated: false
         });
         charityAddresses.push(payable(msg.sender));
+        emit OrganizationAdded(charityAddressInfos[msg.sender]);
     }
 
     /// Bütün bağış adreslerini döndürür
@@ -89,14 +73,14 @@ contract KriptoBagis{
         return charityAddresses;
     }
 
-    function getAddress() public view returns(Organization memory){
+    function getAddress() public view returns(Organization memory){ //Kaldırılabilir
         return charityAddressInfos[msg.sender];
     }
 
     
-    function getAddressInfos(address payable charityAddress) public checkCharityAddress(charityAddress) view returns (address payable, string memory, OrganizationType[] memory, bool)
+    function getAddressInfos(address payable charityAddress) public view returns (address payable, string memory, OrganizationType[] memory, bool)
     {
-        return (charityAddress, charityAddressInfos[charityAddress].organizationName, charityAddressInfos[charityAddress].organizationTypes, isValidated[charityAddress]);
+        return (charityAddress, charityAddressInfos[charityAddress].organizationName, charityAddressInfos[charityAddress].organizationTypes, charityAddressInfos[charityAddress].isValidated);
     }
       
 
@@ -109,6 +93,17 @@ contract KriptoBagis{
     //Organizasyon cüzdanlarını doğrulayacak adreslerin yetkili olup olmadığını kontrol eder
     modifier isManager(){
         require(isManagerAddress[msg.sender] || msg.sender == owner,'The Address is not authorized manager address');
+        _;
+    }
+
+    modifier CheckNewCharityAddress(address payable newAddress){
+        bool addresNotFound = true;
+        for(uint i=0 ; i < charityAddresses.length; i++){
+            if(charityAddresses[i] == newAddress){
+                addresNotFound = false;
+            }
+        }
+        require(addresNotFound, 'The address added to the contract before!');
         _;
     }
 
@@ -289,7 +284,7 @@ contract KriptoBagis{
     isManager()
     checkCharityAddress(validatingAddress) 
     public {
-        isValidated[validatingAddress] = true;
+        charityAddressInfos[validatingAddress].isValidated = true;
         emit AddressValidation(msg.sender, validatingAddress);
     }
 
