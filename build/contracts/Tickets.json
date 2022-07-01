@@ -17,7 +17,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -41,7 +42,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -54,7 +56,8 @@
       "name": "buyTicket",
       "outputs": [],
       "stateMutability": "payable",
-      "type": "function"
+      "type": "function",
+      "payable": true
     }
   ],
   "metadata": "{\"compiler\":{\"version\":\"0.8.13+commit.abaa5c0e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_index\",\"type\":\"uint256\"}],\"name\":\"buyTicket\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"tickets\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"price\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/Deneme.sol\":\"Tickets\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/Deneme.sol\":{\"keccak256\":\"0xca7e5074068cc7a44cc71a4997bfa45ca0823c1b99f39cf4b5094dcf777b5577\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://11915964d9b22bfd0fc835e074f5bfdd46ac7e7ff42314e5cb3251eadd9ffe0e\",\"dweb:/ipfs/Qmb4tgHinsXNeHVEjDD7jGN8VNoaxGuMDzQ2zgHyup7h7L\"]}},\"version\":1}",
@@ -4170,12 +4173,13 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0x48f998ef08D29B519d9308F2064B82C3B004e2B1",
-      "transactionHash": "0x2ff6a2e0387619d7da7d1cb4e265c1c73cf33fadc77bf7943170159d7d07a5c1"
+      "address": "0x2214a7F67B0230c41059B2546DC212eCd184aa7C",
+      "transactionHash": "0x5a8dcdba33ef0fd7f1e2e711a2cb879ed5592a5f693e6d22cecb3a59ee16173a"
     }
   },
   "schemaVersion": "3.4.6",
-  "updatedAt": "2022-06-28T21:57:34.849Z",
+  "updatedAt": "2022-06-30T17:31:49.553Z",
+  "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
     "methods": {},

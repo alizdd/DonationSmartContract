@@ -28,7 +28,7 @@ contract KriptoBagis{
         bool isValidated;
     }
 
-    event OrganizationAdded(Organization _a);
+    event OrganizationAdded(Organization indexed _organization);
 
     /// Bağış yapan adresi ve bağış miktarını blockchain'de kaydeder
     event Donation(
