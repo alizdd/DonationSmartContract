@@ -15,7 +15,6 @@ This study is made for the purpose of creating a transparent donation enviroment
 -Git<br />
 -Truffle<br />
 -Ganache<br />
--VS Code içerisinde Blockchain Development Kit for Ethereum indir(zorunlu değil),<br />
 -Solidity extension in VSCODE<br />
 -Run powershell as administrator and type the following codes:<br />
 >Get-ExecutionPolicy -List<br />
