@@ -56,7 +56,11 @@ contract KriptoBagis{
     }
 
 
-    function addNewOrganization(string memory organizationName, OrganizationType[] memory organizationTypes) CheckNewCharityAddress(payable(msg.sender)) public {
+    function addNewOrganization(
+        string memory organizationName, 
+        OrganizationType[] memory organizationTypes) 
+        CheckNewCharityAddress(payable(msg.sender)) 
+        public {
         charityAddressInfos[msg.sender] = Organization({
             organizationAddress: payable(msg.sender),
             organizationName: organizationName,
@@ -280,21 +284,21 @@ contract KriptoBagis{
     //     }
     // }
 
-    function validateCharityAddress(address payable validatingAddress)
-    isManager()
-    checkCharityAddress(validatingAddress) 
-    public {
-        charityAddressInfos[validatingAddress].isValidated = true;
-        emit AddressValidation(msg.sender, validatingAddress);
-    }
+    // function validateCharityAddress(address payable validatingAddress)
+    // isManager()
+    // checkCharityAddress(validatingAddress) 
+    // public {
+    //     charityAddressInfos[validatingAddress].isValidated = true;
+    //     emit AddressValidation(msg.sender, validatingAddress);
+    // }
 
-    function addManagerAddress(address managerAddress)
-    restrictToOwner()
-    isManager()
-    public {
-        isManagerAddress[managerAddress] = true;
-        emit AddManager(managerAddress);
-    }
+    // function addManagerAddress(address managerAddress)
+    // restrictToOwner()
+    // isManager()
+    // public {
+    //     isManagerAddress[managerAddress] = true;
+    //     emit AddManager(managerAddress);
+    // }
 
     /// Returns the total amount raised by all donations (in wei) towards any charity.
     /// @return totalDonationsAmount

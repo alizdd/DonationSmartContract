@@ -16,22 +16,22 @@ contract('Bagis', (accounts) => {
 			console.log(`Initial: ${initial.toString()}`);
 
 
-			const test1 = await mytest.addNewOrganization("Kizilay", [0, 3, 5], {from: accounts[3]});
+			//const test1 = await mytest.addNewOrganization("Kizilay", [0, 3, 5], {from: accounts[3]});
 
-			const test2 = await mytest.addNewOrganization("Unicef", [6,7], {from: accounts[4]});
+			const test2 = await mytest.addNewOrganization("Unicef", [6,7], {from: accounts[8]});
 
-			const test3 = await mytest.addNewOrganization("Mehmetçik", [3,6], {from: accounts[5]});
+			const test3 = await mytest.addNewOrganization("Mehmetçik", [3,6], {from: accounts[7]});
 
 
-			const output1 = await mytest.getAddress({from: accounts[3]})
+			//const output1 = await mytest.getAddress({from: accounts[3]})
 
-			const output2 = await mytest.getAddress({from: accounts[4]})
+			const output2 = await mytest.getAddress({from: accounts[8]})
 
-			const output3 = await mytest.getAddress({from: accounts[5]})
+			const output3 = await mytest.getAddress({from: accounts[7]})
 
-			console.log("1. Hesap", output1.organizationName);
-			console.log(`result: ${output1}`);
-			console.log(test1.gasUsed);
+			// console.log("1. Hesap", output1.organizationName);
+			// console.log(`result: ${output1}`);
+			// console.log(test1.gasUsed);
 
 			console.log("2. Hesap", output2.organizationName);
 			console.log(`result: ${output2}`);
@@ -41,6 +41,7 @@ contract('Bagis', (accounts) => {
 
 			//,[accounts[4],accounts[5]],50
 
+			
 			const transferAmount = Number(web3.utils.toWei('5', 'ether'));
 
 
@@ -48,7 +49,7 @@ contract('Bagis', (accounts) => {
 
 			//await mytest.depositDirect(accounts[4], 50, {from:accounts[1], value: transferAmount, gas: 3000000});//.sendTransaction()  {from:accounts[1], value:'5e18'}
 
-			await mytest.deposit(accounts[4], [accounts[3],accounts[5]] , 50, {from:accounts[8], value: transferAmount, gas: 3000000});
+			await mytest.deposit(accounts[8], [accounts[7]] , 80, {from:accounts[9], value: transferAmount, gas: 3000000});
 
 			const depositedAddress = await web3.eth.getBalance(accounts[4]);
 			console.log(`Wallet [4]: ${depositedAddress.toString()}`);
