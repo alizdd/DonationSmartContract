@@ -3,7 +3,7 @@
 This study is made for the purpose of creating a transparent donation enviroment between organizations and end users. This study is carried out in order to encourage donations received from the public by ensuring that institutions are honest, reliable and transparent.
 
 <h3> Requirements to run </h3>
--Node JS güncel versiyon indir,<br />
+-Node JS<br />
 -Npm<br />
 -Git<br />
 -Truffle<br />
