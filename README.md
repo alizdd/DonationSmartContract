@@ -10,14 +10,17 @@ This study is made for the purpose of creating a transparent donation enviroment
 
 
 <h3> Requirements to run </h3>
--Node JS<br />
--Npm<br />
--Git<br />
--Truffle<br />
--Ganache<br />
--Solidity extension in VSCODE<br />
--Run powershell as administrator and type the following codes:<br />
+<ul>
+
+
+<li>Node JS</li>
+<li>Npm</li>
+<li>Git</li>
+<li>Truffle</li>
+<li>Ganache</li>
+<li>Solidity extension in VSCODE</li>
+<li>If this is your first time running a local blockchain on your computer, Run powershell as administrator and type the following codes:</li>
 >Get-ExecutionPolicy -List<br />
 >Set-ExecutionPolicy -Scope LocalMachine Unrestricted<br />
 
-
+</ul>
